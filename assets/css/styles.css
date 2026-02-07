@@ -1838,7 +1838,7 @@
             border-radius: 50%;
             border: 1px solid rgba(255, 255, 255, 0.2);
             color: white;
-            display: flex;
+            display: none !important;
             align-items: center;
             justify-content: center;
             font-size: 1.2rem;
@@ -1853,6 +1853,9 @@
             color: black;
             border-color: var(--accent-gold);
             transform: rotate(90deg);
+        }
+        @media (max-width: 768px) {
+            .menu-close { display: block; }
         }
 
         /* Tagline */
@@ -2027,69 +2030,7 @@
             gap: 40px;
         }
 
-    /* --- Custom Golden Cursor --- */
-    body { cursor: none; } /* Hide default cursor */
-    a, button, input, textarea, select, .glass-card, .wave-step { cursor: none; } /* Ensure it hides on interactive elements too */
 
-    .cursor-dot {
-        width: 8px;
-        height: 8px;
-        background-color: var(--accent-gold);
-        border-radius: 50%;
-        position: fixed;
-        top: 0;
-        left: 0;
-        transform: translate(-50%, -50%);
-        z-index: 9999;
-        pointer-events: none;
-        box-shadow: 0 0 10px var(--accent-gold);
-    }
-
-    .cursor-outline {
-        width: 40px;
-        height: 40px;
-        border: 1px solid var(--accent-gold);
-        border-radius: 50%;
-        position: fixed;
-        top: 0;
-        left: 0;
-        transform: translate(-50%, -50%);
-        z-index: 9998;
-        pointer-events: none;
-        transition: width 0.2s, height 0.2s, background-color 0.2s;
-        opacity: 0.6;
-    }
-
-    /* Particle Effect */
-    .gold-particle {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 4px;
-        height: 4px;
-        background: var(--accent-gold);
-        border-radius: 50%;
-        pointer-events: none;
-        z-index: 9997;
-        animation: fadeOutParticle 1s forwards;
-    }
-
-    @keyframes fadeOutParticle {
-        0% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-        100% { opacity: 0; transform: translate(-50%, -50%) translate(var(--tx), var(--ty)) scale(0); }
-    }
-
-    /* Hover States for Cursor */
-    body.hovering .cursor-outline {
-        width: 60px;
-        height: 60px;
-        background-color: rgba(212, 175, 55, 0.1);
-        border-color: transparent;
-    }
-    
-    body.hovering .cursor-dot {
-        transform: translate(-50%, -50%) scale(1.5);
-    }
         .cta-content { margin: 0 auto; display: flex; flex-direction: column; align-items: center; }
         .cta-actions { flex-direction: column; width: 100%; }
         .cta-title { font-size: 2.2rem; }
@@ -2218,4 +2159,72 @@
         }
         
         .cta-title { font-size: 2rem; }
+    }
+
+    /* --- Custom Golden Cursor (Global) --- */
+    @media (min-width: 901px) { /* Only show custom cursor on desktop to avoid touch issues */
+        body { cursor: none; }
+        a, button, input, textarea, select, .glass-card, .wave-step { cursor: none; }
+        
+        .cursor-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--accent-gold);
+            border-radius: 50%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+            pointer-events: none;
+            box-shadow: 0 0 10px var(--accent-gold);
+            display: block;
+        }
+
+        .cursor-outline {
+            width: 40px;
+            height: 40px;
+            border: 1px solid var(--accent-gold);
+            border-radius: 50%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            transform: translate(-50%, -50%);
+            z-index: 9998;
+            pointer-events: none;
+            transition: width 0.2s, height 0.2s, background-color 0.2s;
+            opacity: 0.6;
+            display: block;
+        }
+
+        /* Particle Effect */
+        .gold-particle {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 4px;
+            background: var(--accent-gold);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9997;
+            animation: fadeOutParticle 1s forwards;
+        }
+
+        /* Hover States for Cursor */
+        body.hovering .cursor-outline {
+            width: 60px;
+            height: 60px;
+            background-color: rgba(212, 175, 55, 0.1);
+            border-color: transparent;
+        }
+        
+        body.hovering .cursor-dot {
+            transform: translate(-50%, -50%) scale(1.5);
+        }
+    }
+    
+    @keyframes fadeOutParticle {
+        0% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        100% { opacity: 0; transform: translate(-50%, -50%) translate(var(--tx), var(--ty)) scale(0); }
     }
