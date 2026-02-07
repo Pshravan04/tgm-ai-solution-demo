@@ -25,14 +25,21 @@ document.addEventListener('DOMContentLoaded', () => {
             const icon = menuToggle.querySelector('i');
             if (icon) {
                 if (navLinks.classList.contains('active')) {
-                    icon.classList.remove('fa-bars');
-                    icon.classList.add('fa-times');
-                } else {
-                    icon.classList.remove('fa-times');
-                    icon.classList.add('fa-bars');
+                    // icon.classList.remove('fa-bars');
+                    // icon.classList.add('fa-times');
+                    // Keep hamburger as is if we have a separate close button, OR hide hamburger when open?
+                    // For now, let's keep basic toggle behavior but rely on the close button which is better
                 }
             }
         });
+
+        // Close button logic
+        const closeBtn = document.querySelector('.menu-close');
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+            });
+        }
 
         // Close menu when a link is clicked
         navLinks.querySelectorAll('a').forEach(link => {
