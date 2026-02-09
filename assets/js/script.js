@@ -105,40 +105,55 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- Before/After Comparison Slider ---
-    const slider = document.querySelector('.comparison-slider');
-    const beforeImage = document.querySelector('.image-wrapper.before');
-    const handle = document.querySelector('.handle');
+    const sliders = document.querySelectorAll('.comparison-slider');
 
-    if (slider && beforeImage && handle) {
-        let isDragging = false;
+    sliders.forEach(slider => {
+        const beforeImage = slider.querySelector('.image-wrapper.before');
+        const handle = slider.querySelector('.handle');
 
-        const updateSlider = (x) => {
-            const rect = slider.getBoundingClientRect();
-            let pos = ((x - rect.left) / rect.width) * 100;
+        if (slider && beforeImage && handle) {
+            let isDragging = false;
 
-            // Clamp value between 0 and 100
-            if (pos < 0) pos = 0;
-            if (pos > 100) pos = 100;
+            const updateSlider = (x) => {
+                const rect = slider.getBoundingClientRect();
+                let pos = ((x - rect.left) / rect.width) * 100;
 
-            beforeImage.style.width = `${pos}%`;
-            handle.style.left = `${pos}%`;
-        };
+                // Clamp value between 0 and 100
+                if (pos < 0) pos = 0;
+                if (pos > 100) pos = 100;
 
-        slider.addEventListener('mousedown', () => isDragging = true);
-        window.addEventListener('mouseup', () => isDragging = false);
-        window.addEventListener('mousemove', (e) => {
-            if (!isDragging) return;
-            updateSlider(e.clientX);
-        });
+                beforeImage.style.width = `${pos}%`;
+                handle.style.left = `${pos}%`;
+            };
 
-        // Touch support
-        slider.addEventListener('touchstart', () => isDragging = true);
-        window.addEventListener('touchend', () => isDragging = false);
-        window.addEventListener('touchmove', (e) => {
-            if (!isDragging) return;
-            updateSlider(e.touches[0].clientX);
-        });
-    }
+            const startDrag = (e) => {
+                isDragging = true;
+                // e.preventDefault(); // Prevent text selection/scrolling if needed, but might block scroll
+            };
+
+            const stopDrag = () => {
+                isDragging = false;
+            };
+
+            const moveDrag = (e) => {
+                if (!isDragging) return;
+                let clientX = e.clientX;
+                if (e.touches && e.touches.length > 0) {
+                    clientX = e.touches[0].clientX;
+                }
+                updateSlider(clientX);
+            };
+
+            slider.addEventListener('mousedown', startDrag);
+            slider.addEventListener('touchstart', startDrag, { passive: true });
+
+            window.addEventListener('mouseup', stopDrag);
+            window.addEventListener('touchend', stopDrag);
+
+            window.addEventListener('mousemove', moveDrag);
+            window.addEventListener('touchmove', moveDrag, { passive: false });
+        }
+    });
 
     // --- Accordion for FAQ ---
     const accordionItems = document.querySelectorAll('.accordion-item');
@@ -244,6 +259,91 @@ document.addEventListener('DOMContentLoaded', () => {
 
         particle.addEventListener('animationend', () => {
             particle.remove();
+        });
+    }
+
+    // --- Lightbox Gallery ---
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    const closeBtn = document.querySelector('.close-lightbox');
+    const prevBtn = document.querySelector('.prev-btn');
+    const nextBtn = document.querySelector('.next-btn');
+    // Use a more specific selector or event delegation if items are dynamic, but here they are static
+    const galleryItems = document.querySelectorAll('.masonry-grid .gallery-item img');
+
+    let currentIndex = 0;
+
+    if (lightbox && galleryItems.length > 0) {
+
+        // Function to open lightbox
+        const openLightbox = (index) => {
+            currentIndex = index;
+            const img = galleryItems[currentIndex];
+            lightboxImg.src = img.src;
+            lightboxImg.alt = img.alt;
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden'; // Disable scrolling
+        };
+
+        // Function to close lightbox
+        const closeLightbox = () => {
+            lightbox.classList.remove('active');
+            document.body.style.overflow = ''; // Enable scrolling
+        };
+
+        // Function to show image by index
+        const showImage = (index) => {
+            if (index < 0) index = galleryItems.length - 1;
+            if (index >= galleryItems.length) index = 0;
+            currentIndex = index;
+            const img = galleryItems[currentIndex];
+
+            // Add fade effect
+            lightboxImg.style.opacity = '0';
+            setTimeout(() => {
+                lightboxImg.src = img.src;
+                lightboxImg.alt = img.alt;
+                lightboxImg.style.opacity = '1';
+            }, 200);
+        };
+
+        // Attach click events to images
+        galleryItems.forEach((img, index) => {
+            // Click on the parent .gallery-item to handle clicks on overlays too
+            img.closest('.gallery-item').addEventListener('click', (e) => {
+                e.preventDefault();
+                openLightbox(index);
+            });
+        });
+
+        // Close events
+        if (closeBtn) closeBtn.addEventListener('click', closeLightbox);
+
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) closeLightbox();
+        });
+
+        // Navigation events
+        if (prevBtn) {
+            prevBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                showImage(currentIndex - 1);
+            });
+        }
+
+        if (nextBtn) {
+            nextBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                showImage(currentIndex + 1);
+            });
+        }
+
+        // Keyboard Navigation
+        document.addEventListener('keydown', (e) => {
+            if (!lightbox.classList.contains('active')) return;
+            if (e.key === 'Escape') closeLightbox();
+            if (e.key === 'ArrowLeft') showImage(currentIndex - 1);
+            if (e.key === 'ArrowRight') showImage(currentIndex + 1);
         });
     }
 
