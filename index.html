@@ -805,24 +805,24 @@
                 <!-- Form Side -->
                 <div class="offer-form-wrapper">
                     <h3>Claim Your <span class="serif-highlight gradient-text">Free Trial</span></h3>
-                    <form class="premium-form">
+                    <form class="premium-form" action="send_mail.php" method="POST">
                         <div class="form-row">
                             <div class="form-group">
                                 <label>Name</label>
-                                <input type="text" placeholder="John Doe" required>
+                                <input type="text" name="name" placeholder="John Doe" required>
                             </div>
                             <div class="form-group">
                                 <label>Brand</label>
-                                <input type="text" placeholder="Your Brand" required>
+                                <input type="text" name="brand" placeholder="Your Brand" required>
                             </div>
                         </div>
                         <div class="form-group">
                             <label>WhatsApp</label>
-                            <input type="tel" placeholder="+91 98765 43210" required>
+                            <input type="tel" name="whatsapp" placeholder="+91 98765 43210" required>
                         </div>
                         <div class="form-group">
                             <label>Email</label>
-                            <input type="email" placeholder="john@example.com" required>
+                            <input type="email" name="email" placeholder="john@example.com" required>
                         </div>
                         <button type="submit" class="btn btn-primary full-width pulse-button">
                             Get My 2 Free Images <i class="fas fa-arrow-right"></i>
