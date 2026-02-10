@@ -1108,7 +1108,7 @@
         .persona-card { align-items: center; }
         .persona-card:not(:last-child)::after { display: none; } /* Remove dividers on mobile */
         
-        /* Stack visual on top for ALL rows */
+        /* Stack visual on top for normal rows */
         .feature-row { 
             grid-template-columns: 1fr; 
             gap: 40px; 
@@ -1129,6 +1129,15 @@
             display: flex;
             flex-direction: column;
             align-items: center; 
+        }
+        
+        /* Reverse order for .feature-row.reverse on mobile */
+        .feature-row.reverse .feature-content {
+            order: -1; /* Content appears first */
+        }
+        
+        .feature-row.reverse .feature-visual {
+            order: 1; /* Visual appears second */
         }
         
         .feature-checklist {
