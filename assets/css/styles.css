@@ -1109,12 +1109,12 @@
         .persona-card:not(:last-child)::after { display: none; } /* Remove dividers on mobile */
         
         /* Stack visual on top for normal rows */
-        .feature-row { 
-            grid-template-columns: 1fr; 
-            gap: 40px; 
+        .feature-row {
+            grid-template-columns: 1fr;
+            gap: 40px;
             text-align: center;
             display: flex;
-            flex-direction: column; 
+            flex-direction: column;
         }
         
         .feature-visual { 
